@@ -29,7 +29,7 @@ git clone https://github.com/vantinhl/team3vn_cmu
 
 2. Create a virtual environment - I use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), but you can use any method (virtualenv, venv)
 ```
-conda create -n iris_classification python=3.8
+conda create -n iris_classification python=3.10
 conda activate iris_classification
 ```
 
