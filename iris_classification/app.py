@@ -31,8 +31,8 @@ def predict_class_aws(sepl, sepw, petl, petw):
     return r.json()
 
 ### Streamlit code (works as a straigtht-forward script) ###
-""st.title("Welcome to Iris Classifier")
-st.header("Classify Iris type based on dimensions of the flower")""
+"""st.title("Welcome to Iris Classifier")
+st.header("Classify Iris type based on dimensions of the flower")"""
 
 import streamlit as st
 st.markdown("<h1 style='text-align: center; font-size: 40px;'>Welcome to Team3VN-CMU Iris Classifier Project</h1>", unsafe_allow_html=True)
