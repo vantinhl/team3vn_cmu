@@ -24,7 +24,7 @@ In this PoC, I will be training and deploying a simple ML model. If you follow t
 
 1. Clone this repo
 ```
-git clone https://github.com/shreyansh26/Iris_classification-AWS-Lambda-PoC
+git clone https://github.com/vantinhl/team3vn_cmu
 ```
 
 2. Create a virtual environment - I use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), but you can use any method (virtualenv, venv)
