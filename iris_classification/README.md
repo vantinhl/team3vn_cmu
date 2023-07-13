@@ -29,8 +29,8 @@ git clone https://github.com/shreyansh26/Iris_classification-AWS-Lambda-PoC
 
 2. Create a virtual environment - I use [Miniconda](https://docs.conda.io/en/latest/miniconda.html), but you can use any method (virtualenv, venv)
 ```
-conda create -n iris_project python=3.8
-conda activate iris_project
+conda create -n iris_classification python=3.8
+conda activate iris_classification
 ```
 
 3. Install the required dependencies
