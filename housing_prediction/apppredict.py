@@ -165,6 +165,7 @@ def train_model_random_forest(df):
     # Impute missing values
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
+   
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     model_rf = RandomForestRegressor(n_estimators=100, random_state=42)
@@ -204,8 +205,46 @@ def visualize_prediction_pie(prediction_lr, prediction_rf):
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot(fig)
 
+def main():
+    # st.title("House Price Prediction")
+    df = load_data()
+    # describe_attributes()
+    explore_data(df)
+    model_lr = train_model(df)
+    model_rf = train_model_random_forest(df)
 
+    st.write("### House Price Prediction")
 
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("Enter the following features to get the predicted price:")
+        crim = st.number_input("CRIM - Per Capita Crime Rate:", value=0.0, step=0.01)
+        zn = st.number_input("ZN - Proportion of Residential Land Zoned:", value=0.0, step=0.5)
+        indus = st.number_input("INDUS - Proportion of Non-Retail Business Acres:", value=0.0, step=0.01)
+        chas = st.selectbox("CHAS - Charles River Dummy Variable:", options=[0, 1])
+        nox = st.number_input("NOX - Nitric Oxides Concentration (parts per 10 million):", value=0.0, step=0.01)
+        rm = st.number_input("RM - Average Number of Rooms per Dwelling:", value=0.0, step=0.01)
+        age = st.number_input("AGE - Proportion of Owner-Occupied Units Built Prior to 1940:", value=0.0, step=0.01)
+
+    with col2:
+        dis = st.number_input("DIS - Weighted Distances to Five Boston Employment Centers:", value=0.0, step=0.01)
+        rad = st.number_input("RAD - Index of Accessibility to Radial Highways:", value=0.0, step=1.0)
+        tax = st.number_input("TAX - Full-Value Property Tax Rate per $10,000:", value=0.0, step=1.0)
+        ptratio = st.number_input("PTRATIO - Pupil-Teacher Ratio by Town:", value=0.0, step=0.01)
+        b = st.number_input("B - Proportion of Blacks:", value=0.0, step=0.01)
+        lstat = st.number_input("LSTAT - Percentage of Lower Status of the Population:", value=0.0, step=0.01)
+        medv = st.number_input("Median value of owner-occupied homes in $1000's:", value=0.0, step=0.01)
+
+    input_data = np.array([[crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, b, lstat, medv]])
+
+    if st.button("Predict Price"):
+        prediction_lr = predict_price_linear_regression(model_lr, input_data)
+        st.write("### Predicted House Price using Linear Regression:", prediction_lr)
+
+        prediction_rf = predict_price_random_forest(model_rf, input_data)
+        st.write("### Predicted House Price using Random Forest:", prediction_rf)
+
+        visualize_prediction_pie(prediction_lr, prediction_rf)
 
 def main():
     # st.title("House Price Prediction")
@@ -216,30 +255,35 @@ def main():
     model_rf = train_model_random_forest(df)
 
     st.write("### House Price Prediction")
-    st.write("Enter the following features to get the predicted price:")
-    crim = st.number_input("CRIM - Per Capita Crime Rate:", value=0.0, step=0.01)
-    zn = st.number_input("ZN - Proportion of Residential Land Zoned:", value=0.0, step=0.5)
-    indus = st.number_input("INDUS - Proportion of Non-Retail Business Acres:", value=0.0, step=0.01)
-    chas = st.selectbox("CHAS - Charles River Dummy Variable:", options=[0, 1])
-    nox = st.number_input("NOX - Nitric Oxides Concentration (parts per 10 million):", value=0.0, step=0.01)
-    rm = st.number_input("RM - Average Number of Rooms per Dwelling:", value=0.0, step=0.01)
-    age = st.number_input("AGE - Proportion of Owner-Occupied Units Built Prior to 1940:", value=0.0, step=0.01)
-    dis = st.number_input("DIS - Weighted Distances to Five Boston Employment Centers:", value=0.0, step=0.01)
-    rad = st.number_input("RAD - Index of Accessibility to Radial Highways:", value=0.0, step=1.0)
-    tax = st.number_input("TAX - Full-Value Property Tax Rate per $10,000:", value=0.0, step=1.0)
-    ptratio = st.number_input("PTRATIO - Pupil-Teacher Ratio by Town:", value=0.0, step=0.01)
-    b = st.number_input("B - Proportion of Blacks:", value=0.0, step=0.01)
-    lstat = st.number_input("LSTAT - Percentage of Lower Status of the Population:", value=0.0, step=0.01)
-    medv = st.number_input("Median value of owner-occupied homes in $1000's:", value=0.0, step=0.01)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("**Enter the following features to get the predicted price:**")
+        crim = st.number_input("**CRIM** - Per Capita Crime Rate:", value=0.0, step=0.01)
+        zn = st.number_input("**ZN** - Proportion of Residential Land Zoned:", value=0.0, step=0.5)
+        indus = st.number_input("**INDUS** - Proportion of Non-Retail Business Acres:", value=0.0, step=0.01)
+        chas = st.selectbox("**CHAS** - Charles River Dummy Variable:", options=[0, 1])
+        nox = st.number_input("**NOX** - Nitric Oxides Concentration (parts per 10 million):", value=0.0, step=0.01)
+        rm = st.number_input("**RM** - Average Number of Rooms per Dwelling:", value=0.0, step=0.01)
+        age = st.number_input("**AGE** - Proportion of Owner-Occupied Units Built Prior to 1940:", value=0.0, step=0.01)
+
+    with col2:
+        dis = st.number_input("**DIS** - Weighted Distances to Five Boston Employment Centers:", value=0.0, step=0.01)
+        rad = st.number_input("**RAD** - Index of Accessibility to Radial Highways:", value=0.0, step=1.0)
+        tax = st.number_input("**TAX** - Full-Value Property Tax Rate per $10,000:", value=0.0, step=1.0)
+        ptratio = st.number_input("**PTRATIO** - Pupil-Teacher Ratio by Town:", value=0.0, step=0.01)
+        b = st.number_input("**B** - Proportion of Blacks:", value=0.0, step=0.01)
+        lstat = st.number_input("**LSTAT** - Percentage of Lower Status of the Population:", value=0.0, step=0.01)
+        medv = st.number_input("Median value of owner-occupied homes in $1000's:", value=0.0, step=0.01)
 
     input_data = np.array([[crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, b, lstat, medv]])
 
     if st.button("Predict Price"):
         prediction_lr = predict_price_linear_regression(model_lr, input_data)
-        st.write("### Predicted House Price using Linear Regression:", prediction_lr)
+        st.write("### **Predicted House Price using Linear Regression:**", prediction_lr)
 
         prediction_rf = predict_price_random_forest(model_rf, input_data)
-        st.write("### Predicted House Price using Random Forest:", prediction_rf)
+        st.write("### **Predicted House Price using Random Forest:**", prediction_rf)
 
         visualize_prediction_pie(prediction_lr, prediction_rf)
 
