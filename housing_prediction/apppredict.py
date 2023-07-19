@@ -10,7 +10,28 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.impute import SimpleImputer
 
 # ####################################################
-
+# Header with logo
+logo_path = "team3vn_cmu.jpg"
+# Center the logo on the page
+col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
+with col1:
+    st.write("")
+with col2:
+    st.write("")
+with col3:
+    st.write("")
+with col4:
+    st.image(logo_path, width=150, caption="")
+with col5:
+    st.write("")
+with col6:
+    st.write("")
+with col7:
+    st.write("")
+with col8:
+    st.write("")
+# ...
+# ####################################################
 # Header
 st.markdown(
     "<h1 style='text-align: center; font-size: 30px; background-color: red; color: #FFFFFF'; margin: 20px;padding: 20px;>"
@@ -20,18 +41,18 @@ st.markdown(
 )
 
 st.markdown(
-    "<h2 style='text-align: center; font-size: 30px; background-color: #f2f2f2;'>Predict House Prices</h2>",
+    "<h2 style='text-align: center; font-size: 30px; background-color: #f2f2f2; line-height: 0.3;'>Predict House Prices</h2>",
     unsafe_allow_html=True
 )
 
 st.markdown(
-    "<h2 style='text-align: center; font-size: 26px; background-color: #f8f8f8; color: blue;'>"
+    "<h2 style='text-align: center; font-size: 26px; background-color: #f8f8f8; color: blue; line-height: 0.3;'>"
     "Member: Dieu - Man - Sanh - Thuan - Tinh - Trinh"
     "</h2>",
     unsafe_allow_html=True
 )
 st.markdown(
-    "<h3 style='text-align: center; font-size: 26px; background-color: #f8f8f8; color: gray;'>"
+    "<h3 style='text-align: center; font-size: 26px; background-color: #f8f8f8; color: gray; line-height: 0.3;'>"
     "CMU 2023"
     "</h3>",
     unsafe_allow_html=True
@@ -180,6 +201,9 @@ def visualize_prediction_pie(prediction_lr, prediction_rf):
     ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot(fig)
+
+
+
 
 def main():
     # st.title("House Price Prediction")
