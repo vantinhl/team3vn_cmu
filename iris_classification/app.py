@@ -74,7 +74,10 @@ def read_testing_dataset():
     return testing_data
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 163439ad7147d6a5726fcfcf25352fe09bdae4ae
 
 
 # Slider Inputs
@@ -120,10 +123,17 @@ for i, v in enumerate(slider_values):
 st.pyplot(fig)
 
 # Function to export data to a file
+<<<<<<< HEAD
 # def export_data(data):
     # Replace with the desired file path to export the data
 #    export_file_path = "src/dataset_result.csv"
 #    data.to_csv(export_file_path, index=False)
+=======
+#def export_data(data):
+#    # Replace with the desired file path to export the data
+ #   export_file_path = "src/dataset_result.csv"
+ #   data.to_csv(export_file_path, index=False)
+>>>>>>> 163439ad7147d6a5726fcfcf25352fe09bdae4ae
 
 # Export data
 # updated_data = pd.DataFrame([slider_values], columns=slider_labels)
