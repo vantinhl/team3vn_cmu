@@ -3,6 +3,7 @@ import streamlit as st
 from src.train import Classifier
 import math
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -26,6 +27,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 # Function to predict house prices locally
 def predict_price_local(data):
     dt = list(map(float, data))
@@ -38,6 +40,7 @@ def predict_price_local(data):
 
     cls = Classifier()
     return cls.load_and_test(req)
+
 
 # Function to predict house prices using AWS
 def predict_price_aws(data):
@@ -53,6 +56,30 @@ def predict_price_aws(data):
 
     r = requests.post(API_URL, json=req)
     return r.json()
+
+
+# Function to read dataset for training
+def read_training_dataset():
+    # Replace with the path to your training dataset file
+    training_file_path = "src/dataset.csv"
+    training_data = pd.read_csv(training_file_path)
+    return training_data
+
+
+# Function to read dataset for testing
+def read_testing_dataset():
+    # Replace with the path to your testing dataset file
+    testing_file_path = "src/dataset_test.csv"
+    testing_data = pd.read_csv(testing_file_path)
+    return testing_data
+
+
+# Function to export data to a file
+def export_data(data):
+    # Replace with the desired file path to export the data
+    export_file_path = "src/dataset_result.csv"
+    data.to_csv(export_file_path, index=False)
+
 
 # Slider Inputs
 slider_labels = ["crim", "zn", "indus", "chas", "nox", "rm", "age", "dis", "rad", "tax", "ptratio", "b", "lstat"]
@@ -91,4 +118,11 @@ ax.set_ylabel("Value")
 ax.set_title("House Price Prediction Features")
 ax.grid(True)
 
+for i, v in enumerate(slider_values):
+    ax.text(i, v, f"{v:.2f}", color='black', ha='center', va='bottom')
+
 st.pyplot(fig)
+
+# Export data
+updated_data = pd.DataFrame([slider_values], columns=slider_labels)
+export_data(updated_data)
