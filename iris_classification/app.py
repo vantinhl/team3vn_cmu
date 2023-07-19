@@ -125,5 +125,5 @@ st.pyplot(fig)
  #   data.to_csv(export_file_path, index=False)
 
 # Export data
-#updated_data = pd.DataFrame([slider_values], columns=slider_labels)
-#export_data(updated_data)
+# updated_data = pd.DataFrame([slider_values], columns=slider_labels)
+# export_data(updated_data)
