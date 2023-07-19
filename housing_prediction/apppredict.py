@@ -21,7 +21,7 @@ with col2:
 with col3:
     st.write("")
 with col4:
-    st.image(logo_path, width=150, caption="")
+    st.image(logo_path, width=200, caption="")
 with col5:
     st.write("")
 with col6:
