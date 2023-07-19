@@ -134,8 +134,8 @@ def train_model(df):
     return model
 
 # Function to train and evaluate the model Randomforest
-def train_modelR(df):
-    st.write("### Model Randomforest Training and Evaluation")
+def train_model_random_forest(df):
+    st.write("### Model Random Forest Training and Evaluation")
 
     X = df.drop('MEDV', axis=1)
     y = df['MEDV']
@@ -144,20 +144,20 @@ def train_modelR(df):
     X = imputer.fit_transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    modelR = RandomForestRegressor(n_estimators=100, random_state=42)
-    modelR.fit(X_train, y_train)
+    model_rf = RandomForestRegressor(n_estimators=100, random_state=42)
+    model_rf.fit(X_train, y_train)
 
-    y_pred = modelR.predict(X_test)
+    y_pred = model_rf.predict(X_test)
 
-    st.write("#### Model Randomforest Performance")
+    st.write("#### Model Random Forest Performance")
     st.write("Mean Squared Error:", mean_squared_error(y_test, y_pred))
     st.write("R-squared Score:", r2_score(y_test, y_pred))
-    save_model(modelR, "RandomForest.pkl")
-    return modelR
+    save_model(model_rf, "RandomForest.pkl")
+    return model_rf
 
-# Function to predict house prices using LinearRegression
-
-def predict_price(model, input_data):
+####################
+# Function to predict house prices using Linear Regression
+def predict_price_linear_regression(model, input_data):
     # Ensure input_data has the same number of features as the training dataset
     if input_data.shape[1] != model.coef_.shape[0]:
         raise ValueError("Number of features in input data does not match the model")
@@ -165,31 +165,29 @@ def predict_price(model, input_data):
     prediction = model.predict(input_data)
     return prediction
 
-# Function to predict house prices using RandomForest
-def predict_priceR(modelR, input_data):
-    predictionR = modelR.predict(input_data)
-    return predictionR
+# Function to predict house prices using Random Forest
+def predict_price_random_forest(model_rf, input_data):
+    prediction_rf = model_rf.predict(input_data)
+    return prediction_rf
 
-# Function to visualize the predicted prices
-def visualize_prediction(df, predicted_prices):
-    sorted_indices = np.argsort(df['RM'])
-    sorted_predicted_prices = predicted_prices.flatten()[sorted_indices]
+# Function to visualize the predicted prices using a pie chart
+def visualize_prediction_pie(prediction_lr, prediction_rf):
+    labels = ['Linear Regression', 'Random Forest']
+    sizes = [prediction_lr[0], prediction_rf[0]]
+    explode = (0.1, 0)  # explode the first slice
 
     fig, ax = plt.subplots()
-    ax.scatter(df['RM'], df['PRICE'], label='Actual')
-    ax.scatter(df['RM'].iloc[sorted_indices], sorted_predicted_prices, color='red', label='Predicted')
-    ax.set_xlabel('RM')
-    ax.set_ylabel('PRICE')
-    ax.legend()
+    ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     st.pyplot(fig)
 
 def main():
-    #st.title("House Price Prediction")
+    # st.title("House Price Prediction")
     df = load_data()
-    #describe_attributes()
+    # describe_attributes()
     explore_data(df)
-    model = train_model(df)
-    modelR = train_modelR(df)
+    model_lr = train_model(df)
+    model_rf = train_model_random_forest(df)
 
     st.write("### House Price Prediction")
     st.write("Enter the following features to get the predicted price:")
@@ -211,19 +209,13 @@ def main():
     input_data = np.array([[crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, b, lstat, medv]])
 
     if st.button("Predict Price"):
-        prediction = predict_price(model, input_data)
-        st.write("### Predicted House Price using LinearRegression:", prediction)
-      #  visualize_prediction(df, prediction)
-      #  st.write(prediction)
+        prediction_lr = predict_price_linear_regression(model_lr, input_data)
+        st.write("### Predicted House Price using Linear Regression:", prediction_lr)
 
-        prediction = predict_priceR(modelR, input_data)
-        st.write("### Predicted House Price using RandomForest:", prediction)
+        prediction_rf = predict_price_random_forest(model_rf, input_data)
+        st.write("### Predicted House Price using Random Forest:", prediction_rf)
 
-   # if st.button("Predict RandomForest"):
-    #    prediction = predict_priceR(modelR, input_data)
-     #   st.write("## Predicted House Price using RandomForest:", prediction)
-      #  visualize_prediction(df, prediction)
-       # st.write(prediction)
+        visualize_prediction_pie(prediction_lr, prediction_rf)
 
 if __name__ == "__main__":
     main()
