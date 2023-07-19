@@ -3,9 +3,32 @@ import streamlit as st
 from src.train import Classifier
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 
-def predict_class_local(sepl, sepw, petl, petw):
-    dt = list(map(float,[sepl, sepw, petl, petw]))
+
+# Header
+st.markdown(
+    "<h1 style='text-align: center; font-size: 28px; background-color: red; color: #FFFFFF'; margin: 20px;padding: 20px;>"
+    "&nbsp; Welcome to Team3VN-CMU House Price Prediction &nbsp;"
+    "</h1>",
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    "<h2 style='text-align: center; font-size: 24px; background-color: #f2f2f2;'>Predict House Prices</h2>",
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    "<h2 style='text-align: center; font-size: 20px; background-color: #f8f8f8; color: blue;'>"
+    "Member: Dieu - Man - Sanh - Thuan - Tinh - Trinh"
+    "</h2>",
+    unsafe_allow_html=True
+)
+
+# Function to predict house prices locally
+def predict_price_local(data):
+    dt = list(map(float, data))
 
     req = {
         "data": [
@@ -16,10 +39,11 @@ def predict_class_local(sepl, sepw, petl, petw):
     cls = Classifier()
     return cls.load_and_test(req)
 
-def predict_class_aws(sepl, sepw, petl, petw):
-    API_URL = "https://ti53furxkb.execute-api.us-east-1.amazonaws.com/test/classify"
+# Function to predict house prices using AWS
+def predict_price_aws(data):
+    API_URL = "https://ti53furxkb.execute-api.us-east-1.amazonaws.com/test/predict"
 
-    dt = list(map(float,[sepl, sepw, petl, petw]))
+    dt = list(map(float, data))
 
     req = {
         "data": [
@@ -30,34 +54,41 @@ def predict_class_aws(sepl, sepw, petl, petw):
     r = requests.post(API_URL, json=req)
     return r.json()
 
-### Streamlit code (works as a straigtht-forward script) ###
-# ###
-import streamlit as st
-st.markdown("<h1 style='text-align: center; font-size: 30px;'>Welcome to Team3VN-CMU Iris Classifier Project 2023</h1>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center; font-size: 24px;'>Classify Iris type based on dimensions of the flower</h2>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center; font-size: 20px; color: blue;'>Member: Dieu - Man - Sanh - Thuan - Tinh - Trinh</h2>", unsafe_allow_html=True)
+# Slider Inputs
+slider_labels = ["crim", "zn", "indus", "chas", "nox", "rm", "age", "dis", "rad", "tax", "ptratio", "b", "lstat"]
+slider_values = [0.0] * len(slider_labels)
+slider_min = [0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 0.0, 0.0]
+slider_max = [100.0, 100.0, 100.0, 1, 1.0, 10.0, 100.0, 10.0, 24, 1000.0, 30.0, 100.0, 50.0]
 
-sepl = st.slider('Sepal Length (in cm)', 4.0, 8.0, 4.0)
-sepw = st.slider('Sepal Width (in cm)', 2.0, 5.0, 2.0)
-petl = st.slider('Petal Length (in cm)', 1.0, 7.0, 1.0)
-petw = st.slider('Petal Width (in cm)', 0.1, 2.8, 0.1)
+for i, label in enumerate(slider_labels):
+    slider_values[i] = st.slider(label, slider_min[i], slider_max[i], slider_min[i])
+
+# Store initial values
+initial_values = slider_values.copy()
 
 left, right = st.columns(2)
 with left:
     if st.button("Predict Local"):
-        ret = predict_class_local(sepl, sepw, petl, petw)
-        conf_list = np.array(ret['log_proba'][0])
-        conf = math.exp(conf_list.max())*100
-
-        st.write(f"Prediction: {ret['prediction'][0]}")
-        st.write(f"Confidence: {conf:.2f}%")
+        ret = predict_price_local(slider_values)
+        price_prediction = ret['prediction'][0]
+        st.write(f"Predicted Price: ${price_prediction}")
 
 with right:
     if st.button("Predict AWS"):
-        ret = predict_class_aws(sepl, sepw, petl, petw)
-        conf_list = np.array(ret['log_proba'][0])
-        conf = math.exp(conf_list.max())*100
+        ret = predict_price_aws(slider_values)
+        price_prediction = ret['prediction'][0]
+        st.write(f"Predicted Price: ${price_prediction}")
 
-        st.write(f"Prediction: {ret['prediction'][0]}")
-        st.write(f"Confidence: {conf:.2f}%")
+# Update Flowchart with final result
+x = np.arange(len(slider_labels))
 
+fig, ax = plt.subplots(figsize=(10, 6))
+colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k', 'lime', 'orange', 'purple', 'pink', 'skyblue', 'gold']
+ax.bar(x, slider_values, align='center', alpha=0.5, color=colors)
+ax.set_xticks(x)
+ax.set_xticklabels(slider_labels, rotation=45)
+ax.set_ylabel("Value")
+ax.set_title("House Price Prediction Features")
+ax.grid(True)
+
+st.pyplot(fig)
