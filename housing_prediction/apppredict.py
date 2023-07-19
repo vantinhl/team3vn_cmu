@@ -13,7 +13,7 @@ from sklearn.impute import SimpleImputer
 # Header with logo
 logo_path = "team3vn_cmu.jpg"
 # Center the logo on the page
-col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
+col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns(9)
 with col1:
     st.write("")
 with col2:
@@ -21,7 +21,7 @@ with col2:
 with col3:
     st.write("")
 with col4:
-    st.image(logo_path, width=200, caption="")
+    st.image(logo_path, width=220, caption="")
 with col5:
     st.write("")
 with col6:
@@ -29,6 +29,8 @@ with col6:
 with col7:
     st.write("")
 with col8:
+    st.write("")
+with col9:
     st.write("")
 # ...
 # ####################################################
