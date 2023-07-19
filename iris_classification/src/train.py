@@ -1,5 +1,5 @@
 import pickle
-from src.model import Model
+from model import Model
 
 class Classifier:
     def __init__(self):
