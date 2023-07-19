@@ -4,3 +4,4 @@ pytest
 flask
 numpy
 matplotlib
+requests
