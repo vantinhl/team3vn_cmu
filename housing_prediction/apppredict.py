@@ -142,7 +142,7 @@ def train_model(df):
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     model = LinearRegression()
     model.fit(X_train, y_train)
@@ -166,7 +166,7 @@ def train_model_random_forest(df):
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
    
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     model_rf = RandomForestRegressor(n_estimators=100, random_state=42)
     model_rf.fit(X_train, y_train)
