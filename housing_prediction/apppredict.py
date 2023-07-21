@@ -212,6 +212,18 @@ def visualize_prediction_pie(prediction_lr, prediction_rf):
     plt.show()
     st.pyplot(fig)
 
+def visualize_slider_values(crim, indus, nox, age, rad, ptratio, lstat, zn, chas, rm, dis, tax, b, medv):
+    features = ['CRIM', 'INDUS', 'NOX', 'AGE', 'RAD', 'PTRATIO', 'LSTAT', 'ZN', 'CHAS', 'RM', 'DIS', 'TAX', 'B', 'MEDV']
+    values = [crim, indus, nox, age, rad, ptratio, lstat, zn, chas, rm, dis, tax, b, medv]
+
+    fig, ax = plt.subplots()
+    ax.bar(features, values, color=['red', 'blue', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'cyan', 'magenta', 'teal', 'lime', 'indigo', 'yellow'])
+    ax.set_xlabel('Features')
+    ax.set_ylabel('Feature Value')
+    ax.set_title('Selected Feature Values')
+    ax.tick_params(axis='x', rotation=45)
+    st.pyplot(fig)
+
 def main():
     df = load_data()
     explore_data(df)
@@ -254,6 +266,8 @@ def main():
         b = st.slider('b', 0.32, 19.99, 11.44)
         st.write("**MEDV**:")
         medv = st.slider('medv', 5.0, 50.0, 21.2)
+
+    visualize_slider_values(crim, indus, nox, age, rad, ptratio, lstat, zn, chas, rm, dis, tax, b, medv)
 
     submitted = st.button('Predict Price')
 
