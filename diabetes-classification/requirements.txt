@@ -1,4 +1,0 @@
-joblib==0.14.1
-streamlit
-scikit-learn
-pandas
