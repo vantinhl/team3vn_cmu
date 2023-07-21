@@ -10,8 +10,9 @@ import streamlit as st
 seed = 42
 
 # Read original dataset
-diabetes_df = pd.read_csv(./data/diabetes.csv')
-diabetes_df.sample(frac=1, random_state=seed)
+
+diabetes_df = pd.read_csv('diabetes.csv')
+
 
 # selecting features and target data
 X = diabetes_df[['Pregnancies','Glucose','BloodPressure','SkinThickness','Insulin','BMI','DiabetesPedigreeFunction','Age']]
@@ -35,12 +36,9 @@ y_pred = clf.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")  # Accuracy: 0.91
 
-# save the model to disk
-<<<<<<< HEAD
+
 joblib.dump(clf, "rf_model.sav")
-=======
-joblib.dump(clf, "./model/rf_model.sav")
->>>>>>> 3f5ebd334f486c0583671cbee93bc0a7ded9998b
+
 
 
 print(diabetes_df.describe(include='all'))
