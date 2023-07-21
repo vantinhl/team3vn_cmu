@@ -1,0 +1,12 @@
+scikit-learn==1.0.1
+pandas==1.2.5
+pytest
+flask
+numpy
+<<<<<<< HEAD
+requests
+matplotlib
+=======
+matplotlib
+requests
+>>>>>>> 163439ad7147d6a5726fcfcf25352fe09bdae4ae
