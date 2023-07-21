@@ -9,7 +9,7 @@ import joblib
 seed = 42
 
 # Read original dataset
-iris_df = pd.read_csv("data/iris.csv")
+iris_df = pd.read_csv("iris.csv")
 iris_df.sample(frac=1, random_state=seed)
 
 # selecting features and target data
@@ -35,5 +35,4 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")  # Accuracy: 0.91
 
 # save the model to disk
-
-joblib.dump(clf, "data/rf_model.sav")
+joblib.dump(clf, "rf_model.sav")
