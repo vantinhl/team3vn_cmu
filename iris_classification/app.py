@@ -31,4 +31,4 @@ if st.button("Predict type of Iris"):
 
 st.text('')
 st.text('')
-st.markdown('`Create by` team3vn_cmu ')
+st.markdown('`Create by` team3vn_cmu')
