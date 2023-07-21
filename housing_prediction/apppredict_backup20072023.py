@@ -166,7 +166,7 @@ def train_model_random_forest(df):
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
    
-    X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     model_rf = RandomForestRegressor(n_estimators=100, random_state=42)
     model_rf.fit(X_train, y_train)
@@ -197,7 +197,7 @@ def predict_price_random_forest(model_rf, input_data):
 def visualize_prediction_pie(prediction_lr, prediction_rf):
     labels = ['Linear Regression', 'Random Forest']
     sizes = [prediction_lr[0], prediction_rf[0]]
-    explode = (0.1, 0.0)  # explode the first slice
+    explode = (0.1, 0)  # explode the first slice
 
     fig, ax = plt.subplots()
     ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
@@ -217,35 +217,35 @@ def main():
 
     with input_col1:
         st.write("**CRIM**:")
-        crim = st.slider('crim', 0.0, 9.9665, 0.1447)
+        crim = st.slider("", key="crim", value=0.0, step=0.01)
         st.write("**INDUS**:")
-        indus = st.slider('indus', 0.0, 27.74, 6.96)
+        indus = st.slider("", key="indus", value=0.0, step=0.01)
         st.write("**NOX**:")
-        nox = st.slider('nox', 0.385, 7.313, 0.583)
+        nox = st.slider("", key="nox", value=0.0, step=0.01)
         st.write("**AGE**:")
-        age = st.slider('age', 1.137, 100.0, 65.25)
+        age = st.slider("", key="age", value=0.0, step=0.01)
         st.write("**RAD**:")
-        rad = st.slider('rad', 1.0, 666.0, 5.0)
+        rad = st.slider("", key="rad", value=0.0, step=1.0)
         st.write("**PTRATIO**:")
-        ptratio = st.slider('ptratio', 12.6, 22.0, 18.6)
+        ptratio = st.slider("", key="ptratio", value=0.0, step=0.01)
         st.write("**LSTAT**:")
-        lstat = st.slider('lstat', 1.73, 37.97, 11.36)
+        lstat = st.slider("", key="lstat", value=0.0, step=0.01)
 
     with input_col2:
         st.write("**ZN**:")
-        zn = st.slider('zn', 0.0, 100.0, 0.0)
+        zn = st.slider("", key="zn", value=0.0, step=0.5)
         st.write("**CHAS**:")
-        chas = st.slider('chas', 0.0, 1.0, 0.0)
+        chas = st.slider("", key="chas", value=0.0, step=1.0)
         st.write("**RM**:")
-        rm = st.slider('rm', 3.561, 100.0, 6.3225)
+        rm = st.slider("", key="rm", value=0.0, step=0.01)
         st.write("**DIS**:")
-        dis = st.slider('dis', 1.1296, 24.0, 3.92585)
+        dis = st.slider("", key="dis", value=0.0, step=0.01)
         st.write("**TAX**:")
-        tax = st.slider('tax', 20.2, 711.0, 307.0)
+        tax = st.slider("", key="tax", value=0.0, step=1.0)
         st.write("**B**:")
-        b = st.slider('b', 0.32, 396.9, 391.44)
+        b = st.slider("", key="b", value=0.0, step=0.01)
         st.write("**MEDV**:")
-        medv = st.slider('medv', 5.0, 50.0, 21.2)
+        medv = st.slider("", key="medv", value=0.0, step=0.01)
 
     submitted = st.button('Predict Price')
 
