@@ -252,8 +252,8 @@ def main():
         tax = st.slider('tax', 20.2, 711.0, 307.0)
         st.write("**B**:")
         b = st.slider('b', 0.32, 19.99, 11.44)
-        #st.write("**MEDV**:")
-        #medv = st.slider('medv', 5.0, 50.0, 21.2)
+        st.write("**MEDV**:")
+        medv = st.slider('medv', 5.0, 50.0, 21.2)
 
     submitted = st.button('Predict Price')
 
