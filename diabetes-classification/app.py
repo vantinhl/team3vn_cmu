@@ -38,4 +38,4 @@ if st.button("Predict type of Diabetes"):
 
 st.text('')
 st.text('')
-st.markdown('`Create by` team3vn_cmu ')
+st.markdown('`Create by` team3vn_cmu')
