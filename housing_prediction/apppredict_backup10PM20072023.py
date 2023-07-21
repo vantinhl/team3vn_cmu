@@ -4,13 +4,10 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import pickle
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression, Ridge
+from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.model_selection import GridSearchCV
 
 # Header with logo
 logo_path = "team3vn_cmu.jpg"
@@ -145,7 +142,7 @@ def train_model(df):
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
 
     model = LinearRegression()
     model.fit(X_train, y_train)
@@ -169,7 +166,11 @@ def train_model_random_forest(df):
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
    
+<<<<<<< HEAD
     X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.2, random_state=42)
+=======
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)
+>>>>>>> 09f4ba0661ad1a5cf618c517c4be629d5f3a11ab
 
     model_rf = RandomForestRegressor(n_estimators=100, random_state=42)
     model_rf.fit(X_train, y_train)
@@ -199,17 +200,12 @@ def predict_price_random_forest(model_rf, input_data):
 # Function to visualize the predicted prices using a pie chart
 def visualize_prediction_pie(prediction_lr, prediction_rf):
     labels = ['Linear Regression', 'Random Forest']
-    # Ensure that the predictions are non-negative (you can set negative values to 0)
-    prediction_lr = np.maximum(prediction_lr, 0)
-    prediction_rf = np.maximum(prediction_rf, 0)
     sizes = [prediction_lr[0], prediction_rf[0]]
     explode = (0.1, 0.0)  # explode the first slice
 
     fig, ax = plt.subplots()
     ax.pie(sizes, explode=explode, labels=labels, autopct='%1.1f%%', startangle=90)
     ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    ax.set_title('Result')
-    plt.show()
     st.pyplot(fig)
 
 def main():
@@ -251,7 +247,7 @@ def main():
         st.write("**TAX**:")
         tax = st.slider('tax', 20.2, 711.0, 307.0)
         st.write("**B**:")
-        b = st.slider('b', 0.32, 19.99, 11.44)
+        b = st.slider('b', 0.32, 396.9, 391.44)
         st.write("**MEDV**:")
         medv = st.slider('medv', 5.0, 50.0, 21.2)
 
@@ -266,6 +262,18 @@ def main():
         st.write("### **Predicted House Price using Random Forest:**", prediction_rf)
 
         visualize_prediction_pie(prediction_lr, prediction_rf)
+
+        # Plot the predicted vs actual prices
+        # import matplotlib.pyplot as plt
+
+        fig, ax = plt.subplots()
+        ax.scatter(y_test, y_pred)
+        ax.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=4)
+        ax.set_xlabel('Actual Prices')
+        ax.set_ylabel('Predicted Prices')
+        ax.set_title('Predicted vs Actual Prices')
+        st.subheader('Predicted vs Actual Prices')
+        st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
