@@ -269,7 +269,6 @@ def main():
         ax.set_xlabel('Actual Prices')
         ax.set_ylabel('Predicted Prices')
         ax.set_title('Predicted vs Actual Prices')
-
         st.subheader('Predicted vs Actual Prices')
         st.pyplot(fig)
 
