@@ -1,6 +1,7 @@
 import joblib
 
 
+
 def predict(data):
-    clf = joblib.load("../rf_model.sav")
+    clf = joblib.load("data/rf_model.sav", 'rb')
     return clf.predict(data)

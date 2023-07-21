@@ -1,4 +1,5 @@
 import pandas as pd
+import pickle
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -8,7 +9,7 @@ import joblib
 seed = 42
 
 # Read original dataset
-iris_df = pd.read_csv("iris.csv")
+iris_df = pd.read_csv("data/iris.csv")
 iris_df.sample(frac=1, random_state=seed)
 
 # selecting features and target data
@@ -35,4 +36,4 @@ print(f"Accuracy: {accuracy}")  # Accuracy: 0.91
 
 # save the model to disk
 
-joblib.dump(clf, "../rf_model.sav")
+joblib.dump(clf, "data/rf_model.sav")
