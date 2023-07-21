@@ -34,4 +34,5 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")  # Accuracy: 0.91
 
 # save the model to disk
-joblib.dump(clf, "rf_model.sav")
+
+joblib.dump(clf, "../rf_model.sav")
