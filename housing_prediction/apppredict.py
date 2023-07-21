@@ -260,5 +260,18 @@ def main():
 
         visualize_prediction_pie(prediction_lr, prediction_rf)
 
+# Plot the predicted vs actual prices
+# import matplotlib.pyplot as plt
+
+fig, ax = plt.subplots()
+ax.scatter(y_test, y_pred)
+ax.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'k--', lw=4)
+ax.set_xlabel('Actual Prices')
+ax.set_ylabel('Predicted Prices')
+ax.set_title('Predicted vs Actual Prices')
+
+st.subheader('Predicted vs Actual Prices')
+st.pyplot(fig)
+
 if __name__ == "__main__":
     main()
