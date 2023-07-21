@@ -8,7 +8,7 @@ import joblib
 seed = 42
 
 # Read original dataset
-iris_df = pd.read_csv("data/iris.csv")
+iris_df = pd.read_csv("iris_classification/data/iris.csv")
 iris_df.sample(frac=1, random_state=seed)
 
 # selecting features and target data
