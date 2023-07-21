@@ -10,7 +10,7 @@ import streamlit as st
 seed = 42
 
 # Read original dataset
-diabetes_df = pd.read_csv("./data/diabetes.csv")
+diabetes_df = pd.read_csv(./data/diabetes.csv')
 diabetes_df.sample(frac=1, random_state=seed)
 
 # selecting features and target data
