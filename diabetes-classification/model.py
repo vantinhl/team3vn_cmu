@@ -11,7 +11,7 @@ seed = 42
 
 # Read original dataset
 
-diabetes_df = pd.read_csv('diabetes.csv')
+diabetes_df = pd.read_csv("diabetes.csv")
 
 
 # selecting features and target data
@@ -37,7 +37,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")  # Accuracy: 0.91
 
 
-joblib.dump(clf, "rf_model.sav")
+joblib.dump(clf, "diabetes_model.sav")
 
 
 
