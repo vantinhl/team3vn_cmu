@@ -6,3 +6,4 @@ numpy
 requests
 matplotlib
 seaborn
+seaborn==0.12.1
