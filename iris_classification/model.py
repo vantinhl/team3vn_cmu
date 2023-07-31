@@ -1,21 +1,20 @@
 import pandas as pd
+import pickle
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 import joblib
-import streamlit as st
-
 
 # random seed
 seed = 42
 
 # Read original dataset
-diabetes_df = pd.read_csv("data/diabetes.csv")
-diabetes_df.sample(frac=1, random_state=seed)
+iris_df = pd.read_csv("iris.csv")
+iris_df.sample(frac=1, random_state=seed)
 
 # selecting features and target data
-X = diabetes_df[['Pregnancies','Glucose','BloodPressure','SkinThickness','Insulin','BMI','DiabetesPedigreeFunction','Age']]
-y = diabetes_df[['Outcome']]
+X = iris_df[['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']]
+y = iris_df[['Species']]
 
 # split data into train and test sets
 # 70% training and 30% test
@@ -36,7 +35,4 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy}")  # Accuracy: 0.91
 
 # save the model to disk
-joblib.dump(clf, "model/rf_model.sav")
-
-
-print(diabetes_df.describe(include='all'))
+joblib.dump(clf, "rf_model.sav")
