@@ -4,11 +4,13 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import pickle
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.impute import SimpleImputer
-
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.model_selection import GridSearchCV
 
 # Header with logo
 logo_path = "housing_prediction/team3vn_cmu.jpg"
@@ -60,9 +62,10 @@ st.markdown(
 )
 
 # Function to load the dataset
-@st.cache
-def load_data(file_path):
-    return pd.read_csv(file_path)
+@st.cache_data()
+def load_data():
+    url = 'housing_prediction/Boston_Housing.csv'
+    return pd.read_csv(url)
 
 # Function to describe the attribute information
 def describe_attributes():
@@ -103,7 +106,7 @@ def explore_data(df):
     st.write("### Data Visualization")
     st.write("#### Scatter Plot")
     fig, ax = plt.subplots()
-    ax.scatter(df['RM'], df['MEDV'])
+    ax.scatter(df['RM'],    df['MEDV'])
     ax.set_xlabel('RM: Average number of rooms per dwelling')
     ax.set_ylabel('Median value of owner-occupied homes in $1000s')
     st.pyplot(fig)
@@ -116,32 +119,14 @@ def explore_data(df):
     st.pyplot(fig)
 
     st.write("#### Correlation Heatmap")
-    corr_matrix = df.corr()
+    corr_matrix = df.corr().values
     fig, ax = plt.subplots()
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', ax=ax)
-    st.pyplot(fig)
-
-    st.write("#### Box Plot")
-    fig, ax = plt.subplots()
-    sns.boxplot(data=df, orient='h', palette='Set2')
-    st.pyplot(fig)
-
-    st.write("#### Pair Plot")
-    fig = sns.pairplot(df, diag_kind='kde')
-    st.pyplot(fig)
-
-    st.write("#### Bar Plot")
-    fig, ax = plt.subplots()
-    df['RAD'].value_counts().sort_index().plot(kind='bar')
-    ax.set_xlabel('RAD: Index of accessibility to radial highways')
-    ax.set_ylabel('Count')
-    st.pyplot(fig)
-
-    st.write("#### KDE Plot")
-    fig, ax = plt.subplots()
-    sns.kdeplot(data=df['DIS'], shade=True)
-    ax.set_xlabel('DIS: Weighted distances to five Boston employment centers')
-    ax.set_ylabel('Density')
+    im = ax.imshow(corr_matrix, cmap='coolwarm')
+    ax.set_xticks(np.arange(len(df.columns)))
+    ax.set_yticks(np.arange(len(df.columns)))
+    ax.set_xticklabels(df.columns, rotation=45, ha='right')
+    ax.set_yticklabels(df.columns)
+    fig.colorbar(im)
     st.pyplot(fig)
 
 # Function to save the trained model
@@ -179,12 +164,12 @@ def train_model_random_forest(df):
 
     X = df.drop('MEDV', axis=1)
     y = df['MEDV']
-
+    
     # Impute missing values
     imputer = SimpleImputer(strategy='mean')
     X = imputer.fit_transform(X)
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+   
+    X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.2, random_state=42)
 
     model_rf = RandomForestRegressor(n_estimators=100, random_state=42)
     model_rf.fit(X_train, y_train)
@@ -240,65 +225,61 @@ def visualize_slider_values(crim, indus, nox, age, rad, ptratio, lstat, zn, chas
     st.pyplot(fig)
 
 def main():
-    st.write("**Upload the dataset file (CSV format)**")
-    uploaded_file = st.file_uploader("Choose a file", type=["csv"])
+    df = load_data()
+    explore_data(df)
+    model_lr = train_model(df)
+    model_rf = train_model_random_forest(df)
 
-    if uploaded_file is not None:
-        df = load_data(uploaded_file)
-        explore_data(df)
-        model_lr = train_model(df)
-        model_rf = train_model_random_forest(df)
-        
-        st.write("### House Price Prediction")
+    st.write("### House Price Prediction")
 
-        st.write("**Enter the following features to get the predicted price:**")
-        input_col1, input_col2 = st.columns(2)
+    st.write("**Enter the following features to get the predicted price:**")
+    input_col1, input_col2 = st.columns(2)
 
-        with input_col1:
-            st.write("**CRIM**:")
-            crim = st.slider('crim', 0.0, 9.9665, 0.1447)
-            st.write("**INDUS**:")
-            indus = st.slider('indus', 0.0, 27.74, 6.96)
-            st.write("**NOX**:")
-            nox = st.slider('nox', 0.385, 7.313, 0.583)
-            st.write("**AGE**:")
-            age = st.slider('age', 1.137, 100.0, 65.25)
-            st.write("**RAD**:")
-            rad = st.slider('rad', 1.0, 666.0, 5.0)
-            st.write("**PTRATIO**:")
-            ptratio = st.slider('ptratio', 12.6, 22.0, 18.6)
-            st.write("**LSTAT**:")
-            lstat = st.slider('lstat', 1.73, 37.97, 11.36)
+    with input_col1:
+        st.write("**CRIM**:")
+        crim = st.slider('crim', 0.0, 9.9665, 0.1447)
+        st.write("**INDUS**:")
+        indus = st.slider('indus', 0.0, 27.74, 6.96)
+        st.write("**NOX**:")
+        nox = st.slider('nox', 0.385, 7.313, 0.583)
+        st.write("**AGE**:")
+        age = st.slider('age', 1.137, 100.0, 65.25)
+        st.write("**RAD**:")
+        rad = st.slider('rad', 1.0, 666.0, 5.0)
+        st.write("**PTRATIO**:")
+        ptratio = st.slider('ptratio', 12.6, 22.0, 18.6)
+        st.write("**LSTAT**:")
+        lstat = st.slider('lstat', 1.73, 37.97, 11.36)
 
-        with input_col2:
-            st.write("**ZN**:")
-            zn = st.slider('zn', 0.0, 100.0, 0.0)
-            st.write("**CHAS**:")
-            chas = st.slider('chas', 0.0, 1.0, 0.0)
-            st.write("**RM**:")
-            rm = st.slider('rm', 3.561, 100.0, 6.3225)
-            st.write("**DIS**:")
-            dis = st.slider('dis', 1.1296, 24.0, 3.92585)
-            st.write("**TAX**:")
-            tax = st.slider('tax', 20.2, 711.0, 307.0)
-            st.write("**B**:")
-            b = st.slider('b', 0.32, 19.99, 11.44)
-            st.write("**MEDV**:")
-            medv = st.slider('medv', 5.0, 50.0, 21.2)
+    with input_col2:
+        st.write("**ZN**:")
+        zn = st.slider('zn', 0.0, 100.0, 0.0)
+        st.write("**CHAS**:")
+        chas = st.slider('chas', 0.0, 1.0, 0.0)
+        st.write("**RM**:")
+        rm = st.slider('rm', 3.561, 100.0, 6.3225)
+        st.write("**DIS**:")
+        dis = st.slider('dis', 1.1296, 24.0, 3.92585)
+        st.write("**TAX**:")
+        tax = st.slider('tax', 20.2, 711.0, 307.0)
+        st.write("**B**:")
+        b = st.slider('b', 0.32, 19.99, 11.44)
+        st.write("**MEDV**:")
+        medv = st.slider('medv', 5.0, 50.0, 21.2)
 
-        visualize_slider_values(crim, indus, nox, age, rad, ptratio, lstat, zn, chas, rm, dis, tax, b, medv)
+    visualize_slider_values(crim, indus, nox, age, rad, ptratio, lstat, zn, chas, rm, dis, tax, b, medv)
 
-        submitted = st.button('Predict Price')
+    submitted = st.button('Predict Price')
 
-        if submitted:
-            input_data = np.array([[crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, b, lstat, medv]])
-            prediction_lr = predict_price_linear_regression(model_lr, input_data)
-            st.write("### **Predicted House Price using Linear Regression:**", prediction_lr)
+    if submitted:
+        input_data = np.array([[crim, zn, indus, chas, nox, rm, age, dis, rad, tax, ptratio, b, lstat, medv]])
+        prediction_lr = predict_price_linear_regression(model_lr, input_data)
+        st.write("### **Predicted House Price using Linear Regression:**", prediction_lr)
 
-            prediction_rf = predict_price_random_forest(model_rf, input_data)
-            st.write("### **Predicted House Price using Random Forest:**", prediction_rf)
+        prediction_rf = predict_price_random_forest(model_rf, input_data)
+        st.write("### **Predicted House Price using Random Forest:**", prediction_rf)
 
-            visualize_prediction_pie(prediction_lr, prediction_rf)
+        visualize_prediction_pie(prediction_lr, prediction_rf)
 
 if __name__ == "__main__":
     main()
