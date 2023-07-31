@@ -7,3 +7,4 @@ requests
 matplotlib
 seaborn
 seaborn==0.12.1
+seaborn.objects
